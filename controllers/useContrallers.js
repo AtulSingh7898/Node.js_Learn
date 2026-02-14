@@ -79,7 +79,6 @@ const login = async (req, res) => {
     if (!isPasswordMatch) {
       return res.status(401).json({ message: "Invalid Credentials" });
     }
-    
 
     const token = generateToken(
       checkData.email,
@@ -113,6 +112,8 @@ const sendMail =async(req, res)=>{
         auth: { user: crd.user1 , pass: crd.pass1 },
   });
 }
+
+
 const updateUser = async (req, res) => {
   try {
     const id = req.params.id;

@@ -9,76 +9,83 @@
 
 //     }
 // })
-const useMailModel = require('../Models/mailModel');
-const transportersSevice = require('../services/mailService')
 
-const sendMaileruser = async(req, res)=>{
-    try{
+const useMailModel = require("../Models/mailModel");
+const transportersSevice = require("../services/mailService");
 
-        function sendMail(to, sub, msg){
-        transportersSevice.transporters.sendMail({
-        to:to,
-        subject:sub,
-        html:msg
-        });
-        console.log("mail sended");
+const sendMaileruser = async (req, res) => {
+  try {
+    function sendMail(to, sub, msg) {
+      transportersSevice.transporters.sendMail({
+        to: to,
+        subject: sub,
+        html: msg,
+      });
+      console.log("mail sended");
     }
 
-        let inputData = req.body;
-        if(Object.keys(inputData).length == 0){
-            return res.json({
-            status_code:500,
-            message: "server internal error"
-        })
-        }
-        const newData = await useMailModel.findOne({
-            $or:[
-                {email:inputData.email}
-            ]
-        })
-        if(newData){
-            return res.json({
-                status_code: 409,
-                message: "User Already Exist"
-            })
-        }
-        console.log(newData)
-
-        const DataDb = await useMailModel.create(inputData);
-        console.log(DataDb)
-        
-        if(DataDb){
-            // sendMail("zerocode7898@gmail.com","This message to make the send main through ", "The message send successfully , enjoy each every time");
-           sendMail(inputData.email,inputData.subject, inputData.message);
-
-            return res.json({
-            status_code:200,
-            message: "Successfully to send Mail",
-            data:DataDb
-        })
-        }
-
-    }catch(err){
-        console.log(err)
-        return res.json({
-            status_code:500,
-            message: "server internal error"
-        })
+    let inputData = req.body;
+    if (Object.keys(inputData).length == 0) {
+      return res.json({
+        status_code: 500,
+        message: "server internal error",
+      });
     }
-}
-
-const deletMailUser = async(req,res)=>{
-    try{
-        
-    }catch(err){
-        console.log(err)
-        return res.json({
-            status_code:5000, 
-            message:"Internal Server error",
-
-        })
+    const newData = await useMailModel.findOne({
+      $or: [{ email: inputData.email }],
+    });
+    if (newData) {
+      return res.json({
+        status_code: 409,
+        message: "User Already Exist",
+      });
     }
+    console.log(newData);
 
-}
-module.exports = {sendMaileruser, deletMailUser}
+    const DataDb = await useMailModel.create(inputData);
+    console.log(DataDb);
 
+    if (DataDb) {
+      // sendMail("zerocode7898@gmail.com","This message to make the send main through ", "The message send successfully , enjoy each every time");
+      sendMail(inputData.email, inputData.subject, inputData.message);
+
+      return res.json({
+        status_code: 200,
+        message: "Successfully to send Mail",
+        data: DataDb,
+      });
+    }
+  } catch (err) {
+    console.log(err);
+    return res.json({
+      status_code: 500,
+      message: "server internal error",
+    });
+  }
+};
+
+const deletMailUser = async (req, res) => {
+  try {
+    const id = req.params.id;
+    const userId = await useMailModel.findByIdAndDelete(id);
+    if (userId) {
+      return res.json({
+        status_code: 200,
+        message: "User Email Delete Successfully",
+      });
+      
+    } else {
+      return res.json({
+        status_code: 402,
+        message: "User Not Found",
+      });
+    }
+  } catch (err) {
+    console.log(err);
+    return res.json({
+      status_code: 500,
+      message: "Internal Server error",
+    });
+  }
+};
+module.exports = { sendMaileruser, deletMailUser };

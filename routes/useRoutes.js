@@ -3,7 +3,8 @@ const router = express.Router();
 
 const userController = require('../controllers/useContrallers')
 const handleUpload = require('../utility/uploadFIle')
-const sendMailer = require('../controllers/nodeMailController')
+const sendMailer = require('../controllers/nodeMailController');
+const mailModel = require('../Models/mailModel');
 
 
 router.get('/', (req,res) => {
@@ -20,6 +21,7 @@ router.post('/update/:id', userController.updateUser)
 router.delete("/delete/:id", userController.deleteUser);
 router.post('/upload', handleUpload.single("file"), userController.uploadPDf)
 router.post('/sendmailer',sendMailer.sendMaileruser);
+router.post('/deletemail/:id', sendMailer.deletMailUser);
 
 // router.post('upload', handleUpload)
 // router.post('/send-mail', userController.sendMail )
