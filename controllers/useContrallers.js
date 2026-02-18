@@ -1,7 +1,7 @@
 const express = require("express");
 const userModel = require("../Models/userModel");
 const { configDotenv } = require("dotenv");
-const bcrypt = require('bcrypt');
+const bcrypt = require('bcryptjs');
 
 
 const userService = require('../services/userService')
@@ -15,7 +15,7 @@ configDotenv()
 
 
 
-const register = async (req, res) => {
+const register = async(req, res) => {
   try {
     let inputData = req.body;
     console.log(Object.keys(inputData).length);
@@ -25,6 +25,8 @@ const register = async (req, res) => {
         message: "Provide Proper Data for Registration",
       });
     }
+
+    
     const checkData = await userService.findUser({email:inputData.email, mobile_number:inputData.mobile_number, aadhar_number:inputData.aadhar_number});
 
     console.log(checkData);
@@ -40,7 +42,7 @@ const register = async (req, res) => {
     const hash = bcrypt.hashSync(inputData.password, salt)
 
     const newData =  {...inputData, password:hash};
-    // console.log(newData);
+    console.log(newData);
     
     const storeDb = await userModel.create(newData);
     console.log(storeDb);
@@ -59,22 +61,25 @@ const register = async (req, res) => {
 };
 
 
-const login = async (req, res) => {
+const login = async(req, res) => {
   try {
     const { email, password } = req.body;
-    const inputData = req.body;
-    if (Object.keys(inputData).length === 0) {
-      return res.status(404).json({ message: "Provide Data to Login" });
+
+    if (Object.keys(req.body).length === 0) {
+      return res.status(402).json({ message: "Provide Data to Login" });
     }
-    const checkData = await userModel.findOne({ email: inputData.email });
+    const checkData = await userModel.findOne({
+       email: email,
+      // email: inputData.email
+     });
     if (!checkData) {
       return res.status(404).json({ message: "Account Does not Exists" });
     }
 
-      const isPasswordMatch = await bcrypt.compare(
+    const isPasswordMatch = await bcrypt.compare(
       password,              
       checkData.password     
-    );
+      );
 
     if (!isPasswordMatch) {
       return res.status(401).json({ message: "Invalid Credentials" });
@@ -84,34 +89,36 @@ const login = async (req, res) => {
       checkData.email,
       checkData._id
     );
+    
     if (isPasswordMatch) {
-      return res.status(200).json({ message: "Logged In Successfully", token: token });
+      return res.status(200).json({ message: "Logged In Successfully.", token: token });
     }
-    if (checkData.password === inputData.password) {
-      const token = generateToken.generateToken(checkData.email, checkData._id)
 
-      console.log('token', token)
-      return res.status(200).json({ message: "Logged In Successfully", token: token });
-    } else {
-      return res.status(404).json({ message: "Invalid Credentials" });
-    }
+    // if (checkData.password === inputData.password) { 
+    //   const token = generateToken.generateToken(checkData.email, checkData._id)
+
+    //   console.log('token', token)
+    //   return res.status(200).json({ message: "Logged In Successfully", token: token });
+    // } else {
+    //   return res.status(404).json({ message: "Invalid Credentials" });
+    // }
   } catch (err) {
     return res.json({
-      status_code: 404,
+      status_code: 500,
       message: "Internal Server Error",
     });
   }
 }
 
-const sendMail =async(req, res)=>{
-  const inputData = req.body;
-  const mail = nodemailer.createTransport({
-        host: 'smtp.gmail.com',
-        port: 587,
-        secure: false,
-        auth: { user: crd.user1 , pass: crd.pass1 },
-  });
-}
+// const sendMail =async(req, res)=>{
+//   const inputData = req.body;
+//   const mail = nodemailer.createTransport({
+//         host: 'smtp.gmail.com',
+//         port: 587,
+//         secure: false,
+//         auth: { user: crd.user1 , pass: crd.pass1 },
+//   });
+// }
 
 
 const updateUser = async (req, res) => {

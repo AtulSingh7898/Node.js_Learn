@@ -22,14 +22,7 @@ router.delete("/delete/:id", userController.deleteUser);
 router.post('/upload', handleUpload.single("file"), userController.uploadPDf)
 router.post('/sendmailer',sendMailer.sendMaileruser);
 router.post('/deletemail/:id', sendMailer.deletMailUser);
-
-// router.post('upload', handleUpload)
-// router.post('/send-mail', userController.sendMail )
-
-// router.post('/Pcreate', userProductController.creatProduct);
-
-// router.post('/delete/:id', userController.deleteUser)
-
+// router.post('/seller')
 
 
 

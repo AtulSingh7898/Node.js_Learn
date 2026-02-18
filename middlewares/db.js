@@ -4,6 +4,7 @@ const {configDotenv}  = require('dotenv')
 
 configDotenv()
 
+
 const url = process.env.DB_URL
 
 
