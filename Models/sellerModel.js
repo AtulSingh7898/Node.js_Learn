@@ -15,9 +15,6 @@ const addressSchema = new mongoose.Schema({
 }, {timestamps:true})
 
 
-
-
-
 const sellerSchema = new mongoose.Schema({
 
     first_name: {type:String},

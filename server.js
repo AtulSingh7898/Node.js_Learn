@@ -6,7 +6,7 @@ const app = express()
 
 const userRouter = require('./routes/useRoutes')
 const productRouter = require('./routes/productRoute')
-// const sellerRouter = require('./routes/sellerRoute')
+const sellerRouter = require('./routes/sellerRoute')
 // const uploadRouter = require('./routes/uploadRoute');
 
 // body percel middiware 
@@ -18,10 +18,10 @@ app.get('/',(req,res)=>{
 })
 
 //routes
-app.use('/user', userRouter)
 // app.use("/upload", uploadRouter);
 app.use("/user", userRouter);
 app.use("/product", productRouter)
+app.use('/seller', sellerRouter)
 // app.use('/seller', sellerRouter)
 
 

@@ -1,0 +1,1 @@
+loopUp:- when use loop we want the to the same data from the user and data and seller the are uniqui but common of both.
