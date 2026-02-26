@@ -1,7 +1,9 @@
 const express = require('express')
 const connectDb = require('./middlewares/db')
+const cors = require('cors')
 let PORT = 3001
 const app = express()
+
 
 
 const userRouter = require('./routes/useRoutes')
@@ -9,6 +11,11 @@ const productRouter = require('./routes/productRoute')
 const sellerRouter = require('./routes/sellerRoute')
 // const uploadRouter = require('./routes/uploadRoute');
 
+
+app.use(cors({
+    origin:"http://localhost:5173/",
+    credentials:true
+}))
 // body percel middiware 
 app.use(express.json())
 connectDb()

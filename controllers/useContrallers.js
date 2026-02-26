@@ -1,14 +1,14 @@
 const express = require("express");
 const userModel = require("../Models/userModel");
 const { configDotenv } = require("dotenv");
-const bcrypt = require('bcryptjs');
+const bcrypt = require('bcryptjs')
 
 
 const userService = require('../services/userService')
 const generateToken = require('../utility/createToken');
 const { generateOTP } = require("../utility/generateOtp");
 const  sendOtpFast2Sms = require('../utility/sendOtpFast2Sms');
-const createPassword = require('../utility/CreatePassword')
+// const createPassword = require('../utility/CreatePassword')
 
 
 configDotenv()
@@ -63,45 +63,32 @@ const register = async(req, res) => {
 
 const login = async(req, res) => {
   try {
-    const { email, password } = req.body;
+    const inputData = req.body;
 
     if (Object.keys(req.body).length === 0) {
       return res.status(402).json({ message: "Provide Data to Login" });
     }
     const checkData = await userModel.findOne({
-       email: email,
-      // email: inputData.email
-     });
+      email: inputData.email
+    });
     if (!checkData) {
       return res.status(404).json({ message: "Account Does not Exists" });
     }
 
-    const isPasswordMatch = await bcrypt.compare(
-      password,              
-      checkData.password     
-      );
+    const token = generateToken(
+      checkData.email,
+      checkData.id
+    );
+     
+    const isPasswordMatch = await bcrypt.compare(inputData.password, checkData.password);
 
     if (!isPasswordMatch) {
       return res.status(401).json({ message: "Invalid Credentials" });
     }
 
-    const token = generateToken(
-      checkData.email,
-      checkData._id
-    );
-    
     if (isPasswordMatch) {
       return res.status(200).json({ message: "Logged In Successfully.", token: token });
     }
-
-    // if (checkData.password === inputData.password) { 
-    //   const token = generateToken.generateToken(checkData.email, checkData._id)
-
-    //   console.log('token', token)
-    //   return res.status(200).json({ message: "Logged In Successfully", token: token });
-    // } else {
-    //   return res.status(404).json({ message: "Invalid Credentials" });
-    // }
   } catch (err) {
     return res.json({
       status_code: 500,
@@ -124,13 +111,13 @@ const login = async(req, res) => {
 const updateUser = async (req, res) => {
   try {
     const id = req.params.id;
-    if (Object.keys(req.body).length === 0) {
+    if(Object.keys(req.body).length === 0) {
       return res.status(404).json({ message: "Provide Data to Login" });
     }
-
     const updateUser = await userModel.findByIdAndUpdate(id, req.body, {new:true, runValidators:true})
-          return res.status(200).json({ message: "Updated Successfully", data:updateUser });
+    return res.status(200).json({ message: "Updated Successfully", data:updateUser });
   } catch (err) {
+    console.log(err)
     return res.json({
       status_code: 404,
       message: "login With Unsuccessfull",
@@ -152,7 +139,7 @@ const loginWithOtp = async (req, res) => {
     const otp = generateOTP();
 
     user.otp = otp;
-    user.otpExpiry = Date.now() + 5 * 60 * 1000;
+    user.otpExpiry = Date.now() + 5 * 60 * 1000 (new Data.toDateString());
     await user.save();
 
     await sendOtpFast2Sms(mobile_number, otp);

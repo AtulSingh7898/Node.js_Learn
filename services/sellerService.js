@@ -39,13 +39,6 @@ const getAllProductWithSellerDetails = async(id)=>{
             }
         },
 
-        // {
-        //    $project: { 
-        //     // _id:0,
-        //     product_name:1
-        //    },
-        // }
-
         
     ])
     console.log(products)

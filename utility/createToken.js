@@ -7,7 +7,7 @@ configDotenv();
 const secret_key = process.env.SECRET_KEY_JWT;
 
 const generateToken = (email, id)=>{
-    console.log('hii', email, id);
+    // console.log('hii', email, id);
     return jwt.sign({
         email: email,
         id: id

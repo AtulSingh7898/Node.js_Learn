@@ -5,6 +5,7 @@ const userController = require('../controllers/useContrallers')
 const handleUpload = require('../utility/uploadFIle')
 const sendMailer = require('../controllers/nodeMailController');
 const mailModel = require('../Models/mailModel');
+const { protect } = require('../Models/auth');
 
 
 router.get('/', (req,res) => {
@@ -17,7 +18,7 @@ router.get('/', (req,res) => {
 router.post('/register', userController.register)
 router.post('/login', userController.login)
 router.post('/login-with-otp', userController.loginWithOtp)
-router.post('/update/:id', userController.updateUser)
+router.post('/update/:id', protect, userController.updateUser)
 router.delete("/delete/:id", userController.deleteUser);
 router.post('/upload', handleUpload.single("file"), userController.uploadPDf)
 router.post('/sendmailer',sendMailer.sendMaileruser);
