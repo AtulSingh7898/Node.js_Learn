@@ -1,5 +1,5 @@
 // curring -> curring the the function programing technique and tranform each of 
-//function as an taking single argument with the nested sequence function 
+//function return inside the function as an taking single argument with the nested sequence function 
 
 function f(a){
     return function(b){
@@ -8,8 +8,12 @@ function f(a){
         }
     }
 }
+ 
+// to mathod to print it
 
+//first 
 console.log(f(4)(6)(8))
+// seconde 
 let result = f(1);
 let result1 = result(2);
 let result2 = result1(3);
@@ -48,4 +52,22 @@ console.log(arr2)
 // for(let i = 0; i < arr.length; i++){
 //     console.log(arr2[i])
 // }
+
+
+
+// IIFE (Imidiat Invoke funcgion expression) 
+
+// clause 
+function st(){
+    let count = 0;
+    return function send(){
+        return count++;
+        // console.log(count)
+    }
+}
+
+let s = st();
+console.log(s());
+console.log(s());
+console.log(s());
 

@@ -1,0 +1,35 @@
+what is web pack in backend 
+
+Debouncing in JavaScript is a technique used to limit how often a function runs.
+It ensures that a function is only executed after a certain amount of time has passed since the last time it was invoked.
+
+java backend once explore 
+
+when version is mismatch the then vulnerabilities  is come inside of terminal
+
+
+user router use provide to enviroment router context we navigate(point) the rendering to the page
+
+redish use to token reverse 
+
+by default redloading inside the useEffect 
+
+findOne().select('password');
+
+->multer 
+
+Node mailer
+
+what is axios 
+
+what is interceptore
+ZOI
+DNS->
+
+Simple-oauth2 use with google sign in 
+
+google developer 
+
+claudenary
+
+what is middleware why we use it 
