@@ -2,7 +2,7 @@ const mongoose = require('mongoose')
 const sellerModel = require('../Models/sellerModel')
 const productModel = require('../Models/productModel')
 
-const findSeller = async ({email, mobile,aadhar}) => {
+const findSeller = async({email, mobile,aadhar}) => {
     await sellerModel.findOne({
       $or: [
         { email:email },
@@ -27,6 +27,7 @@ const getAllProductWithSellerDetails = async(id)=>{
                             $expr:{$eq:['$_id', '$sellerId']}
                         }
                     },
+                    
                     {
                         $project:{
                             _id: 0,

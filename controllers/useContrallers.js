@@ -114,7 +114,7 @@ const updateUser = async (req, res) => {
     if(Object.keys(req.body).length === 0) {
       return res.status(404).json({ message: "Provide Data to Login" });
     }
-    const updateUser = await userModel.findByIdAndUpdate(id, req.body, {new:true, runValidators:true})
+    const updateUser = await userModel.findByIdAndUpdate(id, {...req.body, password}, {new:true, runValidators:true})
     return res.status(200).json({ message: "Updated Successfully", data:updateUser });
   } catch (err) {
     console.log(err)
