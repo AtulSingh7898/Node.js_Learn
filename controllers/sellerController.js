@@ -1,7 +1,9 @@
 const express = require('express')
+const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs')
 const sellerService = require('../services/sellerService')
 const sellerModel = require('../Models/sellerModel')
+const generateToken = require('../utility/createToken');
 
 const createSeller = async (req,res) => {
 
@@ -71,8 +73,33 @@ const getAllProductsOfASeller = async (req,res) => {
 
 const sellerLogin = async (req,res) => {
     try {
+      const {email, password} = req.body;
+      if(Object.keys(req.body).length ===0){
+        return res.status(401).json({message:"please Enter the email and password"
+        });
+      }
+      const user = await sellerModel.findOne({email});
+      if(!user){
+        return res.status(409).json({message:"Before Login to register"
+        });
+      }
+      
+      const IsMatchPass = await bcrypt.compare(password, user.password);
+      if(!IsMatchPass){
+        return res.status(402).json({message:"Please Enter the correct password"
+        });
+      }
+
+      const token = await generateToken(email,user.id);
+
+      return res.status(200).json({message:"User Login succefully", token:token});
+
+
 
     } catch(err) {
+      console.log(err)
+       return res.status(500).json({message:"Server Internal Error"
+        });
 
     }
     
@@ -80,18 +107,36 @@ const sellerLogin = async (req,res) => {
 
 const updateSeller = async (req,res) => {
     try {
+      const id = req.params.id;
+      if(Object.keys(req.body).length === 0){
+        return res.status(404).json({message:"Please Enter the passowrd",
+       });
 
+      }
+      const deleteUser = await sellerModel.findByIdAndUpdate(id, req.body, {new:true, isValidate:true});
+      if(!deleteUser){
+        return res.status(409).json({message:"Does Not delete user",
+        });
+      }
+      return res.status(201).json({message:"User Update Successfully",
+      });
     } catch(err) {
-
+      return res.status(500).json({message:"Server Internal Error"
+        });
     }
     
 }
 
 const deleteSeller = async (req,res) => {
     try {
+      const id = req.params.id;
+      const DeletUser = await sellerModel.findByIdAndDelete(id);
+      return res.status(200).json({message:"Server Internal Error"
+        });
 
     } catch(err) {
-
+      return res.status(500).json({message:"Server Internal Error"
+      });
     }
     
 }

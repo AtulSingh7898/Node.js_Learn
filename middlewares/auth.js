@@ -4,11 +4,12 @@ const jwt = require("jsonwebtoken");
 const protect = (req, res, next) => {
 
     const tokens = req.headers.authorization;
+    let token;
 
     if (!tokens || !tokens.startsWith("Bearer ")) {
         return res.status(401).json({ message: "No token provided" });
     }else{
-    const token = tokens.split(" ")[1];
+    token = tokens.split(" ")[1];
     console.log(token)
 
     }

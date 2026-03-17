@@ -12,6 +12,7 @@ const sellerRouter = require('./routes/sellerRoute')
 // const uploadRouter = require('./routes/uploadRoute');
 
 
+
 app.use(cors({
     origin:"http://localhost:5173/",
     credentials:true
@@ -23,6 +24,7 @@ connectDb()
 app.get('/',(req,res)=>{
     res.send('this is the home');
 })
+
 
 //routes
 // app.use("/upload", uploadRouter);
