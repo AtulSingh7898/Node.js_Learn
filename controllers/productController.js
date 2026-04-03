@@ -3,6 +3,7 @@ const productModel = require("../Models/productModel")
 const productService = require("../services/productService");
 
 const createProduct = async (req, res) => {
+
   try {
     const inputData = req.body;
     if (Object.keys(inputData).length === 0) {
@@ -11,6 +12,7 @@ const createProduct = async (req, res) => {
         message: "Provide Proper Data for Registration",
       });
     }
+
     const checkData = await productService.findProduct(inputData.product_code);
     if (checkData) {
       return res.json({
@@ -25,6 +27,7 @@ const createProduct = async (req, res) => {
       message: "Product Created Successfully",
       data: storeDb,
     });
+
   } catch (err) {
     return res.json({
       status_code: 404,
@@ -42,6 +45,7 @@ const findProductByCode = async (req, res) => {
         message: "Provide Proper Data To Find Product",
       });
     }
+    
     const findProduct = await productService.findProduct(inputData.product_code)
     return res.status(200).json({ message: 'Product Found', data:findProduct})
   } catch (err) {
